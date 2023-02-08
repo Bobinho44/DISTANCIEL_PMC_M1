@@ -13,7 +13,7 @@ public class Main {
 		// Maximal number of iterations before we consider it will never diverge
 		// Keep the threshold low for the naive server below
 		// Increase the threshold to 100000 after parallelization for a prettier image
-		int threshold = 3000000;
+		int threshold = 1000000;
 		
 		// affects the picture's colors at the end
 		// should not impact the computation time
@@ -30,13 +30,12 @@ public class Main {
 		
 		// size of a square block in pixel
 		// affects the number of tasks for parallelization
-		int blockSize = 10;
+		int blockSize = 50;
 
-		// TODO: This naive server has to be replaced by a one using a thread pool 
 		// create two new classes that implement the Server interface:
 		//   - one that uses ExecutorService;
 		//   - one that uses your own thread pools;
-		var server = new AsynchronousCustomServer(mandelbrot);
+		var server = new AsynchronousCustomServer(mandelbrot, 10);
 		
 		// Specifies the window on which the picture will be drowned
 		// should not be modified

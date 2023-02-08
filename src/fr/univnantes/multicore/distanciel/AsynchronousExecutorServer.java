@@ -7,18 +7,31 @@ import java.util.concurrent.Future;
 
 public class AsynchronousExecutorServer implements Server {
 
-	private final ExecutorService threadPool = Executors.newFixedThreadPool(15);
+	/**
+	 * Fields
+	 */
+	private final ExecutorService threadPool;
 	private final ImageDrawer drawer;
-		 
-	public AsynchronousExecutorServer(ImageDrawer drawer) {
+
+	/**
+	 * Creates a new asynchronous executor server
+	 *
+	 * @param drawer the drawer
+	 * @param numberOfThreads the number of threads in the thread pool (ExecutorService)
+	 */
+	public AsynchronousExecutorServer(ImageDrawer drawer, int numberOfThreads) {
+		this.threadPool = Executors.newFixedThreadPool(numberOfThreads);
 		this.drawer = drawer;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Pre-compute the image asynchronously
+	 */
 	@Override
 	public Block getBlock(ScreenArea area) {
-		Future<Image> image = threadPool.submit(() -> {
-			return drawer.getImage(area);
-		});
+		Future<Image> image = threadPool.submit(() -> drawer.getImage(area));
 		return new AsynchronousBlock(image, area);
 	}	
 	
